@@ -1,21 +1,35 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { Observable, of, throwError } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AuthService {
-  constructor() {}
+  constructor(private router: Router) {}
 
   setToken(token: any) {
-    localStorage.setItem('accessToken', token);
+    localStorage.setItem("token", token);
   }
 
   login({ email, password }: any): Observable<any> {
-    if (email === 'test@gmail.com' && password === 'test123') {
-      this.setToken('sdjfjoieyruwrjndsfoiuhyiwerb');
-      return of({ email: 'test@gmail.com', password: '1234' });
+    if (email === "test@gmail.com" && password === "test123") {
+      this.setToken("sdjfjoieyruwrjndsfoiuhyiwerb");
+      return of({ Username: "Test User", MobileNumber: "9897988765" });
     }
-    return throwError(() => new Error('test'));
+    return throwError(() => new Error("Invalid details..!"));
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem("token");
+  }
+
+  isLoggedIn() {
+    return this.getToken() !== null;
+  }
+
+  logout() {
+    localStorage.removeItem("token");
+    this.router.navigate(["login"]);
   }
 }
